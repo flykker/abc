@@ -1,3 +1,4 @@
+var patient_count=1;
 
 app.method.patients = {
     onDeleteItem: function(){
