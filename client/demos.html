@@ -1,0 +1,204 @@
+
+<!DOCTYPE html><html lang="ru">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+   <meta name="description" content="">
+   <link rel="stylesheet" href="/demos/css/css.css" type="text/css">
+
+   <link href="/demos/owl/owl.carousel.css" rel="stylesheet">
+   <link href="/demos/owl/owl.theme.css" rel="stylesheet">
+   <link href="/demos/owl/owl.transitions.css" rel="stylesheet">
+   
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+   <script type="text/javascript" src="/demos/owl/owl.carousel.min.js"></script>
+   
+   <script type="text/javascript">
+        $(document).ready(function() {
+ 
+          $("#owl-banner").owlCarousel({
+         
+              navigation : false, 
+              slideSpeed : 300,
+              paginationSpeed : 400,
+              singleItem:true,
+              transitionStyle : "fade"
+         
+          });
+
+          $("#owl-doctor").owlCarousel({
+         
+              navigation : false, 
+              items: 2,
+              slideSpeed : 300,
+              paginationSpeed : 400,
+              singleItem:true
+              //transitionStyle : "fade"
+         
+          });
+         
+        });
+   </script>
+</head>
+
+<body id="main">
+    <div class="wrapper">
+        <div class="header">
+            <div class="navbar-top">
+                <div class="wrapper-1070 row">
+                    <div class="phone v-align col"><span>+7(812) 701-81-01<span></div>
+                    <div class="mobile-menu"><span></span></div>
+                </div>
+            </div>
+            <div class="logo-panel logo-bg">
+                <div class="wrapper-1070">
+                <div class="row">
+                    <div class="logo-demos col">
+                        <img src="/demos/img/logo.png" class="logo-img">
+                        <div class="logo-text"><span class="a">МЕДИЦИНСКИЙ ЦЕНТР</span><br/><span class="b">DEMOS</span></div>
+                    </div>
+                    <div class="logo-demos ortotext col span_2">
+                        ЗУБОТЕХНИЧЕСКАЯ ЛАБОРАТОРИЯ ОРТОДЕПО
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="navbar-menu logo-bg">
+                <div class="menu wrapper-1070">
+                    <ul class="navmenu">
+                        <li>СТОМАТОЛОГИЯ</li>
+                        <li>ОБЩАЯ МЕДИЦИНА</li>
+                        <li>ПЕДИАТРИЯ</li>
+                        <li>КОСМЕТОЛОГИЯ</li>
+                        <li>МАССАЖ</li>
+                        <li>АНАЛИЗЫ</li>
+                        <li>3D-ТОМОГРАФИЯ</li>
+                </div>
+            </div>
+        </div>  
+        <div class="body wrapper-1070">
+            <!--Slider banner-->
+            <div class="slider owl-carousel owl-theme" id="owl-banner">
+                <div class="item">
+                    <img class="pure-img" src="/demos/img/img1.png">
+                    <div class="content">
+                        <div class="header">О клинике</div>
+                        <div class="body">Многопрофильный лечебно-диагностический медицинский центр «Демос» - основан в 2003 году в Санкт-Петербурге во Фрунзенском районе (Купчино).</div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <img class="pure-img" src="http://demosmed.ru/img/prof.png">
+                    <div class="content">
+                        <div class="header">Скидка 50%</div>
+                        <div class="body">Клиника предоставляет скидку 50% на профгигиену в день рождения.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Slider doctors-->
+            <div class="title-block block-doctor">Наши врачи</div>
+            <div class="slider-doctor owl-carousel owl-theme" id="owl-doctor">
+                <div class="item">
+                    <img src="/demos/img/apachidi.jpg">
+                    <div class="title">
+                        <span class="name">Наталья<br>Апачиди</span>
+                        <span class="spec">Отодонт</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/demos/img/volkova.jpg">
+                    <div class="title">
+                        <span class="name">Александра<br>Волкова</span>
+                        <span class="spec">Отодонт</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="/demos/img/krasnova.jpg">
+                    <div class="title">
+                        <span class="name">Наталия<br>Краснова</span>
+                        <span class="spec">Отодонт</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--Block news-->
+            <div class="title-block block-news v-align">Акции и новости<span class="span"></span></div>
+            <div class="content-news">
+                <div class="item">
+                    <div class="news-item ">
+                        <div class="head">15 Мая - АКЦИЯ</div>
+                        <div class="body clear">
+                            <div class="news-img"><img src="/demos/img/krasnova.jpg"></div>
+                            <span class="text">Улыбка "под ключ" с экономией 40%</span>
+                        </div>
+                    </div>
+                    <div class="news-item ">
+                        <div class="head">09 Апреля - НОВОСТИ</div>
+                        <div class="body clear">
+                             <div class="news-img"><img src="/demos/img/spravka.jpg"></div>
+                            <span class="text">Оформим справку в детский оздоровительный лагерь</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Block article-->
+            <div class="title-block block-article v-align">Статьи<span class="span"></span></div>
+            <div class="content-article">
+                <div class="article-item ">
+                    <div class="head">1 Августа - Боли в животе у ребенка</div>
+                    <div class="body clear">
+                        <span class="text">Боли в животе у ребенка , причины ,неотложная помощь. Наиболее частыми причинами болей в животе...</span>
+                    </div>
+                </div>
+                <div class="article-item ">
+                    <div class="head">05 Июня - Лечение кариеса</div>
+                    <div class="body clear">
+                        <span class="text">Кариес зубов у детей и взрослых - это самое распространенное заболевание...</span>
+                    </div>
+                </div>
+                <div class="article-item ">
+                    <div class="head">1 Августа - Боли в животе у ребенка</div>
+                    <div class="body clear">
+                        <span class="text">Боли в животе у ребенка , причины ,неотложная помощь. Наиболее частыми причинами болей в животе...</span>
+                    </div>
+                </div>
+                <div class="article-item ">
+                    <div class="head">05 Июня - Лечение кариеса</div>
+                    <div class="body clear">
+                        <span class="text">Кариес зубов у детей и взрослых - это самое распространенное заболевание...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--Block shop-->
+            <div class="title-block block-shop v-align">Интернет-магазин<span class="span"></span></div>
+            <div class="slider-shop owl-carousel owl-theme" id="owl-shop">
+                <div class="item">
+                    <img class="pure-img" src="/demos/img/img1.png">
+                    <div class="content">
+                        <div class="header">О клинике</div>
+                        <div class="body">Многопрофильный лечебно-диагностический медицинский центр «Демос» - основан в 2003 году в Санкт-Петербурге во Фрунзенском районе (Купчино).</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img class="pure-img" src="http://demosmed.ru/img/prof.png">
+                    <div class="content">
+                        <div class="header">Скидка 50%</div>
+                        <div class="body">Клиника предоставляет скидку 50% на профгигиену в день рождения.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Block shop-->
+            <div class="title-block block-otziv v-align">Отзывы<span class="span"></span></div>
+
+            <!--Block map-->
+            <div><img src="/demos/img/map.png" class="pure-img"></div>
+        </div>
+    </div>
+</div>
+   
+</body>
+</html>

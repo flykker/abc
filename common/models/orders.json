@@ -1,0 +1,47 @@
+{
+  "name": "orders",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "numorder": {
+      "type": "string"
+    },
+    "num_account": {
+      "type": "string"
+    },
+    "summa": {
+      "type": "Number"
+    },
+    "infodoctor": {
+      "type": "string"
+    },
+    "patientname": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "date_create": {
+        "type": "date"
+    },
+    "status": {
+        "type": "Number"
+    },
+    "date_end": {
+        "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "clients": {
+      "type": "belongsTo",
+      "model": "clients",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

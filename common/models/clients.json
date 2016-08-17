@@ -1,0 +1,70 @@
+{
+  "name": "clients",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "Number",
+      "id": true,
+      "generated": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "organization": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "dogovor": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "comments": {
+      "type": "string"
+    },
+    "client_address": {
+      "type": "string",
+      "index": false
+    },
+    "fact_address": {
+      "type": "string",
+      "index": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "contacts": {
+      "type": "embedsMany",
+      "model": "contact",
+      "property": "contacts",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    },
+    "address": {
+      "type": "embedsMany",
+      "model": "address",
+      "property": "address",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    },
+    "orders": {
+      "type": "hasMany",
+      "model": "orders",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

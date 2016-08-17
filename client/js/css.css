@@ -1,0 +1,18 @@
+.webix_view>.webix_disabled {
+    background-color: #fff !important;
+ }
+ .app_button button {
+    padding: 0;
+    text-align: center;
+}
+
+.add_button button{
+    padding: 0px 5px;
+}
+
+.toolbar_button_datatable button {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+}

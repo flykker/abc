@@ -1,0 +1,381 @@
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* CSS Demos */
+body{
+	font-size: 14px;
+	font-family: "Acrom";
+}
+
+ul{
+	padding: 0px;
+	margin: 0px;
+}
+
+@font-face {
+    font-family: 'icomoon';
+    src: url('../icomoon.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.v-align {
+    display: flex;              
+    //flex-direction: column;     
+    align-items: center; 
+}
+
+.align {
+    text-align: center;
+}
+
+.wrapper{
+	width: 100%;
+}
+
+.wrapper .header{
+	width: 100%;
+}
+
+.navbar-top{
+	width: 100%;
+	background: #3a4f5a;
+	overflow: auto;
+	padding: 5px 0px;
+}
+
+.wrapper-1070{
+	max-width: 1070px;
+	margin:0 auto;
+}
+
+.logo-panel{
+	width:100%;
+	overflow: hidden;
+}
+.logo-bg{
+	background-color: #19b1ea;
+}
+.logo-demos{
+	font-size: 36px;
+	font-family: "DIN Round Pro";
+}
+
+.navbar-menu {
+	width: 100%;
+}
+
+.navmenu{
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+.navmenu li{
+	float: left;
+	padding: 0px 15px;
+    line-height: 50px;
+}
+
+.navbar-menu .menu{
+	background-color: white;
+	height: 50px;
+
+}
+
+.logo-img{
+	float: left;
+	margin:20px 10px;
+}
+
+.logo-text{
+	float: left;
+	margin:20px 0px;
+}
+
+
+.logo-text .a{
+	color: white;
+	font-weight: bold;
+}
+
+.logo-text .b{
+	font-size: 34px;
+	font-weight: bold;
+	color:#a3de54 ;
+}
+
+.ortotext{
+	color: white;
+	font-size: 28px;
+	text-align: center;
+}
+
+.phone{
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	padding-left: 5px;
+	float: left;
+}
+
+.phone:before{
+	content:'';
+  	display:block;
+  	width:27px;
+  	height:27px;
+  	margin:5px;
+  	float:left;
+	background: url("/demos/img/tel.png") no-repeat;
+}
+
+.slider .content .header{
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 15px;
+	font-size: 24px;
+}
+
+.slider .content .body{
+	padding: 15px;
+}
+
+.pure-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.mobile-menu{
+	width: 40px;
+	height: 27px;
+	float: right;
+	font-family: "icomoon";
+	font-size: 40px;
+	color: white;
+}
+
+.mobile-menu span:before{
+	content: "\e61e";
+}
+
+.block-doctor{
+	border-top:1px solid #ddd;
+	margin-top: 10px;
+}
+
+.slider-doctor .title{
+    background: rgba(255, 255, 255, 0.8);
+    color: #515050;
+    position: absolute;
+    width: 100%;
+    bottom: 40px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+
+.slider-doctor .title span.name{
+	padding: 10px 30px;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: "DIN Round Pro";
+	display: block;
+}
+
+.slider-doctor .title span.spec{
+	padding-left:30px;
+	font-size: 18px;
+	font-family: "DIN Round Pro";
+	display: block;
+}
+
+.block-news{
+	border-top:1px solid #ddd;
+	margin-top: 10px;
+}
+
+.title-block{
+	text-transform: uppercase;
+	font-size: 20px;
+	padding: 20px 15px;
+	font-weight: bold;
+}
+
+#owl-doctor .item{
+  margin: 3px;
+}
+#owl-doctor .item img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.content-news{
+	overflow: auto;
+}
+.content-news .news-item{
+	width: 80%;
+	display: block;
+	float: left;
+	margin:10px 20px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+}
+
+.content-news .news-item:last-child{
+	border-bottom: none;
+}
+
+.news-item .head{
+	margin: 10px 0px;
+    padding: 5px;
+    background-color: #19b1ea;
+    color: white;
+    font-family: "DIN Round Pro";
+    float: left;
+    border-radius: 4px;
+}
+
+.news-item .news-img{
+	width:100%;
+	height: 180px;
+	overflow: hidden;
+}
+
+.news-item .news-img img{
+	width:80%;
+}
+
+.news-item .body .text{
+	padding: 10px 0px;
+	display: block;
+	font-family: "DIN Round Pro";
+	font-size: 20px;
+}
+
+.block-article {
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.block-shop {
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.title-block .span:after{
+	font-family: "icomoon";
+    content: "\e604";
+    font-size: 42px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+/* Block Article news*/
+
+.content-article{
+	overflow: auto;
+}
+.content-article .article-item{
+	width: 90%;
+	display: block;
+	float: left;
+	margin:10px 20px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+}
+
+.content-article .article-item:last-child{
+	border-bottom: none;
+}
+
+.article-item .head{
+	margin: 10px 0px;
+    padding: 5px;
+    background-color: #19b1ea;
+    color: white;
+    font-family: "DIN Round Pro";
+    float: left;
+    border-radius: 4px;
+}
+
+
+.article-item .body .text{
+	padding: 10px 0px;
+	display: block;
+	font-family: "DIN Round Pro";
+	font-size: 15px;
+}
+
+.clear{
+	clear: both;
+}
+
+.block-otziv{
+	background-color: #20242d;
+	color:white;
+	margin-top: 10px;
+
+}
+@media screen and (max-width:480px) {
+	.navbar-menu{
+		display: none;
+	}
+
+	.logo-text{
+		font-size: 19px;
+	}
+	.logo-img{
+		height: 50px; 
+	}
+	.ortotext{
+		display: none !important;
+	}
+}

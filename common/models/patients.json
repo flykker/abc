@@ -1,0 +1,39 @@
+{
+  "name": "patients",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "Number",
+      "id": true,
+      "generated": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "dogovor": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "comments": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string",
+      "index": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

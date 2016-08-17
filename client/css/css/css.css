@@ -1,0 +1,9 @@
+body{
+	font-size: 14px;
+	font-family: "Acrom";
+}
+
+.wrapper .header{
+	height: 40px;
+	width: 100%;
+}

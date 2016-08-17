@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+    <link rel="stylesheet" href="/js/webix/codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="/js/underscore.js"></script>
+    <script type="text/javascript" src="/js/backbone.js"></script>
+
+    <script src="/js/webix/codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <title>SideBar Menu</title>
+
+    <script type="text/javascript" src="/js/sidebar.js"></script>
+    <link rel="stylesheet" type="text/css" href="/js/sidebar.css">
+
+    <style>
+        .app_button button {
+            padding: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        ModelClients = Backbone.Model.extend({});
+        Clients = Backbone.Collection.extend({
+            model: ModelClients,
+            url: "/clients/",
+            save: function (options) {
+                this.sync("update", this, options);
+            }
+        });
+        b_clients = new Clients();
+
+        b_clients.on("webix:add webix:change", function(model) {
+            console.log("Save");
+            model.save();
+        });
+        b_clients.on("webix:remove", function(model) {
+            model.destroy();
+        });
+
+        ModelOrders = Backbone.Model.extend({});
+        Orders = Backbone.Collection.extend({
+            model: ModelOrders,
+            url: "/orders/"
+        });
+        b_orders = new Orders();
+
+        b_orders.on("webix:add webix:change", function(model) {
+            model.save();
+        });
+        b_orders.on("webix:remove", function(model) {
+            model.destroy();
+        });
+
+        var menu_data = [
+
+            {
+                id: "clients",
+                icon: "table",
+                value: "Контрагенты"
+            }, {
+                id: "orders",
+                icon: "book",
+                value: "Заказы"
+            }
+        ];
+
+        function client_put() {
+            var val = $$('client_form_edit').getValues();
+
+
+            b_clients.add(new ModelClients(val));
+            $$('client_window').hide();
+            webix.message("Model Save");
+        }
+
+        function order_put() {
+            var val = $$('order_form_edit').getValues();
+
+            b_orders.add(new ModelOrders(val));
+            $$('order_window').hide();
+            webix.message("Model Save");
+        }
+
+        webix.ready(function() {
+
+
+
+            var client_form = webix.ui({
+                view: "window",
+                id: "client_window",
+                resize: true,
+                position: "center",
+                width: 400,
+                height: 500,
+                move: "true",
+                head: {
+                    view: "toolbar",
+                    cols: [{
+                        view: "label",
+                        label: "Edit client form"
+                    }, ]
+                },
+                body: {
+                    view: "form",
+                    id: "client_form_edit",
+                    elements: [
+
+                        {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Name",
+                            name: "name"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Organization",
+                            name: "organization"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Email",
+                            name: "email"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Phone",
+                            name: "phone"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Address",
+                            name: "address"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Comments",
+                            name: "comments"
+                        }, {
+                            view: "text",
+                            type: "hidden",
+                            name: "id"
+                        },
+
+                        {
+                            cols: [{
+                                view: "button",
+                                value: "Save",
+                                type: "form",
+                                click: "client_put()"
+                            }, {
+                                view: "button",
+                                value: "Cancel",
+                                click: "$$('client_window').hide()"
+                            }]
+                        }
+                    ]
+                }
+            });
+
+            var order_form = webix.ui({
+                view: "window",
+                id: "order_window",
+                position: "center",
+                resize: true,
+                width: 400,
+                height: 500,
+                move: "true",
+                head: {
+                    view: "toolbar",
+                    cols: [{
+                        view: "label",
+                        label: "Edit order form"
+                    }, ]
+                },
+                body: {
+                    view: "form",
+                    id: "order_form_edit",
+                    elements: [{
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Order",
+                            name: "numorder"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Organization",
+                            name: "idorganization"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Doctor",
+                            name: "infodoctor"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Patient",
+                            name: "patientname"
+                        }, {
+                            view: "text",
+                            labelWidth: "100",
+                            label: "Comment",
+                            name: "comment"
+                        },
+
+
+                        {
+                            cols: [{
+                                view: "button",
+                                value: "Save",
+                                type: "form",
+                                click: "order_put()"
+                            }, {
+                                view: "button",
+                                value: "Cancel",
+                                click: "$$('order_window').hide()"
+                            }]
+                        }
+                    ]
+                }
+            });
+
+            webix.ui({
+                rows: [{
+                    view: "toolbar",
+                    padding: 3,
+                    elements: [{
+                            view: "button",
+                            type: "icon",
+                            icon: "bars",
+                            width: 37,
+                            align: "left",
+                            css: "app_button",
+                            click: function() {
+                                $$("$sidebar1").toggle()
+                            }
+                        }, {
+                            view: "label",
+                            align: "left",
+                            width: "auto",
+                            label: "ABC+ Platform"
+                        }, {
+                            view: "button",
+                            align: "left",
+                            type: "icon",
+                            width: 45,
+                            css: "app_button",
+                            icon: "envelope-o",
+                            badge: 4
+                        }, {
+                            view: "button",
+                            align: "left",
+                            type: "icon",
+                            width: 45,
+                            css: "app_button",
+                            icon: "bell-o",
+                            badge: 10
+                        },
+
+                        //{},
+
+                    ]
+                }, {
+                    cols: [{
+                        view: "sidebar",
+                        data: menu_data,
+                        on: {
+                            onAfterSelect: function(id) {
+
+                                if (id == "orders") {
+                                    $$("clients_table").hide();
+                                    $$("orders_table").show();
+
+                                    b_orders.fetch();
+                                    $$("orders_table").sync(b_orders);
+
+
+                                } else {
+                                    $$("orders_table").hide();
+                                    $$("clients_table").show();
+
+
+                                    b_clients.fetch();
+
+                                    $$("clients_table").sync(b_clients);
+                                }
+                            }
+                        }
+                    }, {
+                        view: "resizer"
+                    }, {
+                        view: "multiview",
+                        animate: false,
+                        cells: [{
+                                id: "clients_table",
+                                headerRowHeight: 27,
+                                rowHeight: 27,
+                                view: "datatable",
+                                backbone_collection: b_clients,
+                                select: "row",
+                                editable: true,
+                                //editaction:"dblclick",
+                                select: "row",
+                                on: {
+                                    onAfterRender: webix.once(function() {
+
+                                        b_clients.fetch();
+                                        //console.log(this.config);
+                                        this.sync(this.config.backbone_collection);
+                                    }),
+                                    onItemDblClick: function(rowid) {
+                                        client_form.show();
+                                        $$("client_form_edit").load("/clients/" + b_clients.get(rowid).id);
+                                    }
+                                },
+                                columns: [
+
+                                    {
+                                        id: "name",
+                                        fillspace: true,
+                                        header: ["Name"]
+                                    }, {
+                                        id: "organization",
+                                        fillspace: true,
+                                        header: ["Organization"]
+                                    }, {
+                                        id: "phone",
+                                        fillspace: true,
+                                        header: ["Phone"]
+                                    }, {
+                                        id: "email",
+                                        fillspace: true,
+                                        header: ["Email"]
+                                    }, {
+                                        id: "comments",
+                                        fillspace: true,
+                                        header: ["Comment"]
+                                    }, {
+                                        id: "address",
+                                        fillspace: true,
+                                        header: ["Address"]
+                                    },
+
+                                ]
+                            },
+
+                            {
+                                id: "orders_table",
+                                view: "datatable",
+                                headerRowHeight: 27,
+                                backbone_collection: b_orders,
+                                select: "row",
+                                rowHeight: 27,
+                                editable: true,
+                                //editaction:"dblclick",
+                                on: {
+                                    onItemDblClick: function(rowid) {
+                                        order_form.show();
+                                        $$("order_form_edit").load("/orders/" + b_orders.get(rowid).id);
+                                    }
+                                },
+                                select: "row",
+                                columns: [
+
+                                    {
+                                        id: "numorder",
+                                        fillspace: true,
+                                        header: ["Order"]
+                                    }, {
+                                        id: "idorganization",
+                                        fillspace: true,
+                                        header: ["Organization"]
+                                    }, {
+                                        id: "infodoctor",
+                                        fillspace: true,
+                                        header: ["Doctor"]
+                                    }, {
+                                        id: "patientname",
+                                        fillspace: true,
+                                        header: ["Patient"]
+                                    }, {
+                                        id: "comment",
+                                        fillspace: true,
+                                        header: ["Comment"]
+                                    },
+
+                                ]
+                            }
+                        ]
+                    }]
+                }]
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>
