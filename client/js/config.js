@@ -6,6 +6,9 @@ var app = {
     method: {}
 };
 
+webix.Date.startOnMonday=true;
+webix.i18n.setLocale("ru-RU");
+
 app.models.delete = function(name,data){
     var model = new ModelDelete({ model: name, data: data});
     model.save();

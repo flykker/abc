@@ -1,5 +1,5 @@
 var patient_count=1;
-
+var p_self;
 app.method.patients = {
     onDeleteItem: function(){
         
@@ -25,24 +25,27 @@ app.method.patients = {
         
         var item = new webix.ui( patient_config(patient_count) );
         $$("patients_tab_view").addView(item);
-        $$('$tab1').addOption({value:"Пац-нт Ефимова", close:true, id:item.config.id},true)
+        $$('$tab1').addOption({value:"Новый пац-нт", close:true, id:item.config.id},true)
         console.log(item.config.id)
         patient_count++;
     },
 
-    onClickEdit: function(){
-        
-        var item = webix.ui( patients_form_full() );
+    onClickEdit: function(rowid){
+        var item = new webix.ui( patient_config(patient_count) );
         $$("patients_tab_view").addView(item);
-        $$('$tab1').addOption({value:"Пациент", close:true, id:item.config.id},true)
+        $$('$tab1').addOption({value:"Пац-нт Ефимова", close:true, id:item.config.id},true)
+        
+        $$("main_info_" + patient_count + "_view").load(api+"patients/" + app.patients.get(rowid).id);
+        patient_count++;
+     
     },
 
     toExcel: function(){
         webix.toExcel($$("patients_datatable"));
     },
 
-    save: function() {
-        var val = $$('patient_form_edit').getValues();
+    saveInfo: function() {
+        var val = this.getFormView().getValues();
 
         if (val.id == ""){
 
@@ -52,7 +55,8 @@ app.method.patients = {
             model = app.patients.get({id:val.id});
             model.set( val );
         }
-        $$('patient_window').destructor();
+        //p_self=this;
+        
     }
 }
 
@@ -99,14 +103,24 @@ return {
             type: "hidden",
             name: "id",
             height: 10
-        }
+        },{height:30},{
+                cols: [{
+                    view: "button",
+                    align:"right",
+                    value: "Сохранить",
+                    type: "form",
+                    click: app.method.patients.saveInfo
+                }]
+            }
     ]
 }
 };
 
 
 
-var patients_datatable = {
+app.patients_datatable = function(){
+
+    return {
     id:"patients_datatable",
     headerRowHeight: 27,
     rowHeight: 27,
@@ -117,19 +131,14 @@ var patients_datatable = {
     editable: true,
     on: {
         onItemDblClick: function(rowid) {
-            new webix.ui(patients_form()).show();
-            $$("patient_form_edit").load(api+"patients/" + app.patients.get(rowid).id);
+            app.method.patients.onClickEdit(rowid);
         }
     },
 
-     data: [
-        { id:1, name:"The Shawshank Redemption", year:1994, votes:678790, rank:1},
-        { id:2, name:"The Godfather", year:1972, votes:511495, rank:2}
-    ],
     columns: [{
         id: "name",
         fillspace: true,
-        header: ["Наименование"],
+        header: ["Наименование", {content:"textFilter"}],
     }, {
         id: "phone",
         fillspace: true,
@@ -151,54 +160,90 @@ var patients_datatable = {
         fillspace: true,
         header: "Адрес"
     }]
-}
+}};
 
 var patient_schet_view = function(id){
 
     return {
     id:"patient_schet_"+id,
-    height:"100%",
-    headerRowHeight: 27,
-    rowHeight: 27,
-    scroll: "y",
-    view: "datatable",
-    select: "row",
-    editable: true,
-    data: [
-        { id:1, name:"The Shawshank Redemption", year:1994, votes:678790, rank:1},
-        { id:2, name:"The Godfather", year:1972, votes:511495, rank:2}
-    ],
-    
-    columns: [{
-        id: "date",
-        width: 80,
-        header: "Дата",
-    }, {
-        id: "name",
-        width: 400,
-        header: "Наименование",
-    }, {
-        id: "phone",
-        fillspace: true,
-        header: "Количество"
-    },  {
-        id: "address",
-        fillspace: true,
-        header: "Сумма"
-    }, {
-        id: "comments",
-        fillspace: true,
-        header: "Комментарии"
+    rows:[ patients_schet_toolbar(),
+    {    
+        
+        height:"100%",
+        headerRowHeight: 27,
+        rowHeight: 27,
+        scroll: "y",
+        view: "datatable",
+        select: "row",
+        editable: true,
+        
+        columns: [{
+            id: "date",
+            width: 80,
+            header: "Дата",
+        }, {
+            id: "name",
+            width: 400,
+            header: "Наименование",
+        }, {
+            id: "phone",
+            fillspace: true,
+            header: "Количество"
+        },  {
+            id: "address",
+            fillspace: true,
+            header: "Сумма"
+        }, {
+            id: "comments",
+            fillspace: true,
+            header: "Комментарии"
+        }]
     }]
 }}
 
+var patients_schet_toolbar = function(){
+
+    return {
+    view: "toolbar",
+    padding:0,
+    height: 37,
+    width:100, 
+
+    cols:[{
+        view: "button",
+        align: "left",
+        type: "icon",
+        icon: "plus",
+        css: "toolbar_button_datatable",
+        width: "auto",
+        heigt: 28,
+        //click: app.method.patients.onClickAdd
+    },{
+        view: "button",
+        align: "left",
+        type: "icon",
+        icon: "trash-o",
+        css: "toolbar_button_datatable",
+        width: "auto",
+        heigt: 28,
+        //click: app.method.patients.onDeleteItem
+    },{
+        view: "button",
+        align: "left",
+        height: 28,
+        type: "icon",
+        icon: "file-excel-o",
+        css: "toolbar_button_datatable",
+        tooltip: "Выгрузка в Excel",
+        //click: app.method.patients.toExcel
+    }] 
+}}
 
 var patients_toolbar = {
     view: "toolbar",
     padding:0,
     height: 37,
     cols:[{ 
-        id:"_123", 
         width:100, 
 
         cols:[{
@@ -239,9 +284,25 @@ var patients_toolbar = {
         minWidth:180,
         tabMinWidth:180,
         multiview:true,
-        value: "patients_datatable", 
+        animate:false,
+        value: "patients_datatable",
+
+        on: {
+            onAfterRender: function(){
+                if(this.config.options.length > 1){
+                    this.showOption("patients_datatable");
+                }else{
+                    this.hideOption("patients_datatable");
+                }
+                
+            },
+            onOptionRemove: function(id, value){
+                $$(id).destructor();
+            }
+
+        } ,
         options: [
-            {value: 'Список пациентов', id: 'patients_datatable'},
+            {value: 'Список пациентов', hidden:true, id: 'patients_datatable'},
         ]
     }]
 }
@@ -256,11 +317,20 @@ var patient_config = function(id){
 
     cols: [{
         view: "sidebar",
+        id:"patient_sidebar_"+id,
+        ready: function() {
+            this.select("main_info_"+id);      
+        },
         data: [
         {
             id: "main_info_"+id,
             value: "&nbsp;&nbsp;&nbsp;Общие сведения"
         },
+        
+        // {
+        //     id: "patient_medkarta_"+id,
+        //     value: "&nbsp;&nbsp;&nbsp;Мед. карта"
+        // },
         {
             id: "patient_schet_"+id,
             value: "&nbsp;&nbsp;&nbsp;Счета"
@@ -283,6 +353,6 @@ var patient_config = function(id){
 
 var patients_table = function(){
     return {
-        id: "patients_view", rows:[ patients_toolbar, { view: "multiview", height:"100%", id:"patients_tab_view", cells:[ patients_datatable ] }  ] 
+        id: "patients_view",  rows:[ patients_toolbar, { animate:false, id:"patients_tab_view", cells:[ app.patients_datatable() ] }  ] 
     }
 };

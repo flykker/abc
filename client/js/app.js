@@ -575,25 +575,35 @@ function order_put() {
 }
 
 var zapis = function() {
+
+    var initColumns = function(){
+
+        var columns=[{ id: "time", header: "Время" , width:60}];
+        var calendar = webix.i18n.calendar;
+        var week = 7;
+
+        var date = webix.Date.datePart(new Date());
+        var weekStart = webix.Date.weekStart(new Date);
+
+        //var nextDay = new Date(d.setDate(d.getDate() + 1));
+
+        for (var i = 0; i <= week; i++) {
+            var headerCol = calendar.dayShort[date.getDay()]+", "+date.getDate()+" "+calendar.monthFull[date.getMonth()]
+            var col = i+1;
+            columns.push({ id: "col_"+col, header: headerCol, fillspace: true })
+        }
+        return columns;
+    }
+
     return { id:"zapis_view", rows:[
-        //{ id:"zapis_toolbar", height:40 },
+        { view:"toolbar", id:"zapis_toolbar", height:40, elements:[{ view:"label", label:"Запись на приём" }] },
             { id:"zapis_table", cols:[{ id:"zapis_data", view: "datatable",
                 adjust:true,
                 height: "100%",
                 rowHeight: 27,
                 headerRowHeight: 27,
                 select:"cell",
-                columns:[
-                    { id: "time", header: "Время" , width:60},
-                    { id: "col_1", header: "Врач №1", fillspace: true, },
-                    { id: "col_2", header: "Врач №2", fillspace: true, },
-                    { id: "col_3", header: "Врач №3", fillspace: true, },
-                    { id: "col_4", header: "Врач №4", fillspace: true, },
-                    { id: "col_5", header: "Врач №5", fillspace: true, },
-                    { id: "col_6", header: "Врач №5", fillspace: true, },
-                    { id: "col_7", header: "Врач №5", fillspace: true, },
-                    { id: "col_8", header: "Врач №5", fillspace: true, },
-                ],
+                columns: initColumns(),
                 data: [
                     {time:"9:00"},
                     {time:"9:30"},
@@ -1130,7 +1140,6 @@ app.config = {
     },
 }
 
-webix.i18n.setLocale("ru-RU");
 $$('$sidebar1').select('zapis');
 
 function modelCopyFields(){
