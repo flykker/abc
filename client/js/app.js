@@ -574,36 +574,86 @@ function order_put() {
     $$('order_form_edit').clear();
 }
 
+var zapisWeekStart;
+
+var nextDay = function(d,i){
+    return new Date(d.setDate(d.getDate() + i));
+}
+
+var nextWeekStart = function(d){
+    
+    var date = new Date(d.setDate(d.getDate() + 7));
+    return webix.Date.weekStart(date);
+}
+
+var prevWeekStart = function(d){
+    
+    var date = new Date(d.setDate(d.getDate() - 7));
+    return webix.Date.weekStart(date);
+}
+
+var initColumns = function(startDate){
+    zapisWeekStart = startDate;
+    var columns=[{ id: "time", header: "Время" , width:60}];
+    var calendar = webix.i18n.calendar;
+    var week = 7;
+
+    var weekStart = webix.Date.weekStart(startDate);
+    var date = weekStart;
+    
+
+    for (var i = 0; i < week; i++) {
+
+        var headerCol = calendar.dayShort[date.getDay()]+", "+date.getDate()+" "+calendar.monthFull[date.getMonth()]
+        var col = i+1;
+        columns.push({ id: "col_"+col, header: headerCol, fillspace: true })
+
+        date = nextDay(weekStart,1);
+    }
+    return columns;
+}
+
+var nextZapis = function(d){
+    d = nextWeekStart(d);
+    
+    $$('zapis_data').config.columns = initColumns(d);
+    $$('zapis_data').refreshColumns();
+}
+
+var prevZapis = function(d){
+    d = prevWeekStart(d);
+    
+    $$('zapis_data').config.columns = initColumns(d);
+    $$('zapis_data').refreshColumns();
+}
+
 var zapis = function() {
 
-    var initColumns = function(){
-
-        var columns=[{ id: "time", header: "Время" , width:60}];
-        var calendar = webix.i18n.calendar;
-        var week = 7;
-
-        var date = webix.Date.datePart(new Date());
-        var weekStart = webix.Date.weekStart(new Date);
-
-        //var nextDay = new Date(d.setDate(d.getDate() + 1));
-
-        for (var i = 0; i <= week; i++) {
-            var headerCol = calendar.dayShort[date.getDay()]+", "+date.getDate()+" "+calendar.monthFull[date.getMonth()]
-            var col = i+1;
-            columns.push({ id: "col_"+col, header: headerCol, fillspace: true })
-        }
-        return columns;
-    }
-
     return { id:"zapis_view", rows:[
-        { view:"toolbar", id:"zapis_toolbar", height:40, elements:[{ view:"label", label:"Запись на приём" }] },
+        { view:"toolbar", id:"zapis_toolbar", height:40, elements:[{ view:"label", label:"Запись на приём" }, {view: "button",
+                type: "icon",
+                icon: "angle-left",
+                css: "zapis_angle",
+                width: 30,
+                on:{
+                    onItemClick: function() { prevZapis(zapisWeekStart) }
+                },
+                align: "right"}, {view: "button",
+                type: "icon",
+                icon: "angle-right",
+                css: "zapis_angle",
+                width: 30,
+                align: "right", 
+                on:{
+                    onItemClick: function() { nextZapis(zapisWeekStart) }
+                } },{width:30}] },
             { id:"zapis_table", cols:[{ id:"zapis_data", view: "datatable",
                 adjust:true,
                 height: "100%",
                 rowHeight: 27,
                 headerRowHeight: 27,
                 select:"cell",
-                columns: initColumns(),
+                columns: initColumns(new Date()),
                 data: [
                     {time:"9:00"},
                     {time:"9:30"},
@@ -630,7 +680,10 @@ var zapis = function() {
                     {time:"20:00"},
                     {time:"20:30"}
                 ]
-            }, {height: "100%", view:"accordion", cols:[{header: "Выбор врача и даты", headerHeight:30, headerAltHeight:30, collapsed:true, body:{ rows:[{view:"calendar"}] } }] } ] }
+            }, {height: "100%", view:"accordion", cols:[{header: "Выбор врача и даты", headerHeight:30, headerAltHeight:30, collapsed:true, body:{ rows:[{view:"calendar", on:{ onAfterDateSelect:function(a){ 
+                $$('zapis_data').config.columns = initColumns(a);
+                $$('zapis_data').refreshColumns();
+             } } }] } }] } ] }
         ] }
 }
 
