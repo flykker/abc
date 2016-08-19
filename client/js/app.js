@@ -606,7 +606,24 @@ var initColumns = function(startDate){
 
         var headerCol = calendar.dayShort[date.getDay()]+", "+date.getDate()+" "+calendar.monthFull[date.getMonth()]
         var col = i+1;
-        columns.push({ id: "col_"+col, header: headerCol, fillspace: true })
+
+        columns.push({ id: "col_"+col, header: headerCol, fillspace: true, template: function (obj,a,b,c,d) {
+                        
+            if ( obj[c.id] ){
+                name = obj[c.id]
+                var count = webix.i18n.parseTimeFormatDate(obj.endtime) - webix.i18n.parseTimeFormatDate(obj.starttime);
+                console.log(count)
+                count = count/60000/30;
+                console.log(count)
+                height = count*26;
+                var time = obj.starttime+"-"+obj.endtime+" "
+                return "<div class='zapis_event' style='height:"+height+"px' time='"+obj.time+"'>"+ "<div class='title'>" + time + name + "</div>"+"</div>";
+            }else{
+                return ""
+            }
+            
+            } 
+        })
 
         date = nextDay(weekStart,1);
     }
@@ -650,20 +667,22 @@ var zapis = function() {
             { id:"zapis_table", cols:[{ id:"zapis_data", view: "datatable",
                 adjust:true,
                 height: "100%",
-                rowHeight: 27,
+                rowHeight: 30,
+                css: "zapis_data",
+                areaselect:true, 
                 headerRowHeight: 27,
                 select:"cell",
                 columns: initColumns(new Date()),
                 data: [
                     {time:"9:00"},
                     {time:"9:30"},
-                    {time:"10:00", col_4:"Пац-нт Ефимова Е.В."},
+                    {time:"10:00", starttime:"10:00", endtime:"11:00", col_4:"№456 Ефимова Е.В."},
                     {time:"10:30"},
-                    {time:"11:00"},
+                    {time:"11:00", starttime:"11:00", endtime:"12:30", col_4:"№4512 Иванов Е.В."},
                     {time:"11:30"},
                     {time:"12:00"},
                     {time:"12:30"},
-                    {time:"13:00", col_1:"Пац-нт Ефимова Е.В."},
+                    {time:"13:00"},
                     {time:"13:30"},
                     {time:"14:00"},
                     {time:"14:30"},
@@ -671,7 +690,7 @@ var zapis = function() {
                     {time:"15:30"},
                     {time:"16:00"},
                     {time:"16:30"},
-                    {time:"17:00"},
+                    {time:"17:00", starttime:"17:00", endtime:"17:30", col_4:"№1234 Скворцов А.Н."},
                     {time:"17:30"},
                     {time:"18:00"},
                     {time:"18:30"},
@@ -1227,3 +1246,18 @@ function modelFieldCapitalize(){
         // m.save();
     });
 }
+
+// var zapis_p = webix.ui({
+//     view:"zapis_time",
+//     height:22,
+//     width:130,
+//     move:true,
+//     resize:true,
+//     head:false,
+//     left:400, top:250,
+//     body:{
+//         height: 28,
+//         //template:'<div style="width:100%;height:100%;background-color:#fff;" class="$pop1">9:00-9:30 П-нт Ефимова Е.В.</div>'
+//     },
+//     hidden:false,
+//})
