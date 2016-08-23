@@ -592,9 +592,42 @@ var prevWeekStart = function(d){
     return webix.Date.weekStart(date);
 }
 
+var timeCol = [
+    {time:"9:00"},
+    {time:"9:30"},
+    {time:"10:00"},
+    {time:"10:30"},
+    {time:"11:00"},
+    {time:"11:30"},
+    {time:"12:00"},
+    {time:"12:30"},
+    {time:"13:30"},
+    {time:"14:00"},
+    {time:"14:30"},
+    {time:"15:00"},
+    {time:"15:30"},
+    {time:"16:00"},
+    {time:"16:30"},
+    {time:"17:00"},
+    {time:"17:30"},
+    {time:"18:00"},
+    {time:"18:30"},
+    {time:"19:00"},
+    {time:"20:00"},
+    {time:"20:30"},
+    {time:"21:00"}
+]
+
+var data2 = [
+    {starttime:"2016-08-23T15:00:00.000Z", endtime:"2016-08-23T16:00:00.000Z", name:"№456 Ефимова Е.В."},
+    {starttime:"2016-08-24T11:00:00.000Z", endtime:"2016-08-24T12:00:00.000Z", name:"№4512 Иванов Е.В."},
+    {starttime:"2016-08-26T13:00:00.000Z", endtime:"2016-08-26T13:30:00.000Z", name:"№451 Коновалов Е.В."},
+    {starttime:"2016-09-02T13:00:00.000Z", endtime:"2016-09-02T13:30:00.000Z", name:"№45 Копин Е.В."}
+]
+
 var initColumns = function(startDate){
     zapisWeekStart = startDate;
-    var columns=[{ id: "time", header: "Время" , width:60}];
+    var columns=[{ id: "time", header: "Время", width:60 }];
     var calendar = webix.i18n.calendar;
     var week = 7;
 
@@ -607,17 +640,17 @@ var initColumns = function(startDate){
         var headerCol = calendar.dayShort[date.getDay()]+", "+date.getDate()+" "+calendar.monthFull[date.getMonth()]
         var col = i+1;
 
-        columns.push({ id: "col_"+col, header: headerCol, fillspace: true, template: function (obj,a,b,c,d) {
-                        
-            if ( obj[c.id] ){
-                name = obj[c.id]
-                var count = webix.i18n.parseTimeFormatDate(obj.endtime) - webix.i18n.parseTimeFormatDate(obj.starttime);
-                console.log(count)
+        var dd = date.getFullYear()+" "+(date.getMonth()+1)+" "+date.getDate();
+
+        columns.push({ id: "col_"+dd, data_date:dd, header: headerCol, fillspace: true, template: function (obj,a,b,c,d) {
+
+            if ( c.id == obj.id ){
+                var count = new Date(obj.endtime) - new Date(obj.starttime);
                 count = count/60000/30;
-                console.log(count)
                 height = count*26;
-                var time = obj.starttime+"-"+obj.endtime+" "
-                return "<div class='zapis_event' style='height:"+height+"px' time='"+obj.time+"'>"+ "<div class='title'>" + time + name + "</div>"+"</div>";
+                var time = webix.i18n.timeFormatStr(new Date(obj.starttime))+"-"+webix.i18n.timeFormatStr(new Date(obj.endtime))+" ";
+                var ev_id = "$event"+webix.uid();
+                return "<div class='zapis_event' id='"+ev_id+"' style='height:"+height+"px' time='"+obj.time+"'>"+ "<div class='title'>" + time + obj.name + "</div>"+"</div>";
             }else{
                 return ""
             }
@@ -632,15 +665,17 @@ var initColumns = function(startDate){
 
 var nextZapis = function(d){
     d = nextWeekStart(d);
-    
+    //$$('zapis_data').clearAll();
     $$('zapis_data').config.columns = initColumns(d);
+    //$$('zapis_data').parse(timeCol);
     $$('zapis_data').refreshColumns();
 }
 
 var prevZapis = function(d){
     d = prevWeekStart(d);
-    
+    //$$('zapis_data').clearAll();
     $$('zapis_data').config.columns = initColumns(d);
+    //$$('zapis_data').parse(timeCol);
     $$('zapis_data').refreshColumns();
 }
 
@@ -669,38 +704,59 @@ var zapis = function() {
                 height: "100%",
                 rowHeight: 30,
                 css: "zapis_data",
-                areaselect:true, 
                 headerRowHeight: 27,
                 select:"cell",
+                autoConfig:true,
                 columns: initColumns(new Date()),
-                data: [
-                    {time:"9:00"},
-                    {time:"9:30"},
-                    {time:"10:00", starttime:"10:00", endtime:"11:00", col_4:"№456 Ефимова Е.В."},
-                    {time:"10:30"},
-                    {time:"11:00", starttime:"11:00", endtime:"12:30", col_4:"№4512 Иванов Е.В."},
-                    {time:"11:30"},
-                    {time:"12:00"},
-                    {time:"12:30"},
-                    {time:"13:00"},
-                    {time:"13:30"},
-                    {time:"14:00"},
-                    {time:"14:30"},
-                    {time:"15:00"},
-                    {time:"15:30"},
-                    {time:"16:00"},
-                    {time:"16:30"},
-                    {time:"17:00", starttime:"17:00", endtime:"17:30", col_4:"№1234 Скворцов А.Н."},
-                    {time:"17:30"},
-                    {time:"18:00"},
-                    {time:"18:30"},
-                    {time:"19:00"},
-                    {time:"19:30"},
-                    {time:"20:00"},
-                    {time:"20:30"}
-                ]
+                events: data2,
+                on:{
+                    onMouseMoving:function(ev){
+                        //var id = this.locate(ev);
+                        //console.log(ev)
+                    },
+                    
+                    onBeforeRender: function(data){
+                        
+                        var el = data.order;
+                        for (var i = 0; i < el.length; i++) {
+                            var e = this.getItem(el[i]);
+
+                            for(var l=1; l < this.config.columns.length; l++){
+                                var o = this.config.columns[l];
+                                var date_string = new Date(o.data_date+" "+e.time);
+                        
+                                var _starttime = date_string.toISOString();
+                                var d = this.getData;
+                                var m = _.findWhere(this.config.events, {starttime: _starttime });
+                                
+                                if(m){
+                                    e["starttime"] = m.starttime;
+                                    e["endtime"] = m.endtime;
+                                    e["name"] = m.name;
+                                    e["id"] = "col_"+o.data_date;
+                                }
+                            }
+
+                        }
+                    },
+                    onAfterRender: function(){
+                        var self = this;
+                        $('.zapis_event').on("dblclick", function(ev){
+                            var id = self.locate(ev);
+                            var item = self.getItem(id);
+                            self.config._onEventClick(ev, id, item);
+                        })
+                    }
+                },
+                _onEventClick: function(ev,id,item){
+                    console.log(item)
+                },
+                onMouseMove:{},
+                data: timeCol, 
             }, {height: "100%", view:"accordion", cols:[{header: "Выбор врача и даты", headerHeight:30, headerAltHeight:30, collapsed:true, body:{ rows:[{view:"calendar", on:{ onAfterDateSelect:function(a){ 
+                //$$('zapis_data').clearAll();
                 $$('zapis_data').config.columns = initColumns(a);
+                //$$('zapis_data').parse(timeCol);
                 $$('zapis_data').refreshColumns();
              } } }] } }] } ] }
         ] }
