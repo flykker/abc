@@ -55,5 +55,9 @@
   "deleted": {
     "dataSource": "db",
     "public": true
+  },
+  "personal": {
+    "dataSource": "db",
+    "public": true
   }
 }

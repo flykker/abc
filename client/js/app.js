@@ -621,6 +621,7 @@ var timeCol = [
 var data2 = [
     {starttime:"2016-08-23T15:00:00.000Z", endtime:"2016-08-23T16:00:00.000Z", name:"№456 Ефимова Е.В."},
     {starttime:"2016-08-24T11:00:00.000Z", endtime:"2016-08-24T12:00:00.000Z", name:"№4512 Иванов Е.В."},
+    {starttime:"2016-08-25T11:00:00.000Z", endtime:"2016-08-25T12:00:00.000Z", name:"№643 Климов Е.В."},
     {starttime:"2016-08-26T13:00:00.000Z", endtime:"2016-08-26T13:30:00.000Z", name:"№451 Коновалов Е.В."},
     {starttime:"2016-09-02T13:00:00.000Z", endtime:"2016-09-02T13:30:00.000Z", name:"№45 Копин Е.В."}
 ]
@@ -643,8 +644,9 @@ var initColumns = function(startDate){
         var dd = date.getFullYear()+" "+(date.getMonth()+1)+" "+date.getDate();
 
         columns.push({ id: "col_"+dd, data_date:dd, header: headerCol, fillspace: true, template: function (obj,a,b,c,d) {
-
-            if ( c.id == obj.id ){
+            console.log(c.id, obj.col_id, obj.time)
+            if ( c.id == obj.col_id ){
+                
                 var count = new Date(obj.endtime) - new Date(obj.starttime);
                 count = count/60000/30;
                 height = count*26;
@@ -682,7 +684,32 @@ var prevZapis = function(d){
 var zapis = function() {
 
     return { id:"zapis_view", rows:[
-        { view:"toolbar", id:"zapis_toolbar", height:40, elements:[{ view:"label", label:"Запись на приём" }, {view: "button",
+        { view:"toolbar", id:"zapis_toolbar", height:40, elements:[{ view:"label", label:"Запись на приём" },
+        {view:"combo", 
+    label: 'Выбор сотрудника',
+    width: 450,
+    labelWidth: 140,
+    inputWidth: 400,
+    value:0, 
+    options:{
+                    view:"suggest",
+                    id:"$suggest_personalId",
+                    keyPressTimeout:500,
+                    filter:function(item, value){
+                        if(item.name.toString().toLowerCase().indexOf(value.toLowerCase())===0)
+                            return true;
+                        return false;
+                    },
+                    body:{ 
+                        view:"list", 
+                        url:"/api/personals",
+                        template:"#name#",
+                        yCount:10
+                    }
+                }
+    },
+
+         {view: "button",
                 type: "icon",
                 icon: "angle-left",
                 css: "zapis_angle",
@@ -714,7 +741,12 @@ var zapis = function() {
                         //var id = this.locate(ev);
                         //console.log(ev)
                     },
-                    
+                    onItemDblClick: function(id, e, node){
+                        var self = this;
+                        var item = self.getItem(id);
+                        
+                        console.log(item)
+                    },
                     onBeforeRender: function(data){
                         
                         var el = data.order;
@@ -728,12 +760,13 @@ var zapis = function() {
                                 var _starttime = date_string.toISOString();
                                 var d = this.getData;
                                 var m = _.findWhere(this.config.events, {starttime: _starttime });
-                                
+
                                 if(m){
                                     e["starttime"] = m.starttime;
                                     e["endtime"] = m.endtime;
                                     e["name"] = m.name;
-                                    e["id"] = "col_"+o.data_date;
+                                    e["col_id"] = "col_"+o.data_date;
+                                    console.log(e)
                                 }
                             }
 
@@ -753,7 +786,7 @@ var zapis = function() {
                 },
                 onMouseMove:{},
                 data: timeCol, 
-            }, {height: "100%", view:"accordion", cols:[{header: "Выбор врача и даты", headerHeight:30, headerAltHeight:30, collapsed:true, body:{ rows:[{view:"calendar", on:{ onAfterDateSelect:function(a){ 
+            }, {height: "100%", view:"accordion", cols:[{header: "Выбор врача и даты", headerHeight:30, headerAltHeight:30, body:{ rows:[{view:"calendar", on:{ onAfterDateSelect:function(a){ 
                 //$$('zapis_data').clearAll();
                 $$('zapis_data').config.columns = initColumns(a);
                 //$$('zapis_data').parse(timeCol);
@@ -809,7 +842,7 @@ ui_config = {
         }, {
             view: "multiview",
             animate: false,
-            cells: [ zapis(), patients_table(), app.client_table() , app.order_table() ]
+            cells: [ zapis(), patients_table(), personal_table(), app.client_table() , app.order_table() ]
         }]
     }]
 };
@@ -856,6 +889,21 @@ app.patients.on("add change", function(model) {
     webix.message("Пациент создан");
 });
 app.patients.on("remove", function(model) {
+    model.destroy();
+});
+
+ModelPersonal = Backbone.Model.extend({ idAttribute: "id" });
+Personal = Backbone.Collection.extend({
+    model: ModelPersonal,
+    url: api+"personals/"
+});
+app.personal = new Personal();
+
+app.personal.on("add change", function(model) {
+    model.save();
+    webix.message("Сотрудник создан");
+});
+app.personal.on("remove", function(model) {
     model.destroy();
 });
 
@@ -1088,13 +1136,7 @@ var order_form = function(){
                 view:"combo",
                 
                 on: {
-                    // onItemClick: function(){
-                    //     var list = $$("$c_f_infodoctor").getList();
-                    //     $$("input_infodoctor").setValue("");
-
-                    //     var list = $$("$c_f_address").getList();
-                    //     $$("input_address").setValue("");
-                    // },
+                    
                     "onChange": function(id){
                         
                         if(id){
@@ -1266,6 +1308,9 @@ app.config = {
     patients: {
         model: app.patients
     },
+    personal: {
+        model: app.personal
+    },
 }
 
 $$('$sidebar1').select('zapis');
@@ -1302,18 +1347,3 @@ function modelFieldCapitalize(){
         // m.save();
     });
 }
-
-// var zapis_p = webix.ui({
-//     view:"zapis_time",
-//     height:22,
-//     width:130,
-//     move:true,
-//     resize:true,
-//     head:false,
-//     left:400, top:250,
-//     body:{
-//         height: 28,
-//         //template:'<div style="width:100%;height:100%;background-color:#fff;" class="$pop1">9:00-9:30 П-нт Ефимова Е.В.</div>'
-//     },
-//     hidden:false,
-//})

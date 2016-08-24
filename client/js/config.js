@@ -3,6 +3,7 @@ var app = {
     orders: {},
     models: {},
     patients:{},
+    personal:{},
     method: {}
 };
 
@@ -33,7 +34,13 @@ app.menu = [
         model: app.patients,
         icon: "book",
         value: "Пациенты"
-    }, 
+    },
+    {
+        id: "personal",
+        model: app.personal,
+        icon: "book",
+        value: "Сотрудники"
+    },  
     {
         id: "clients",
         model: app.clients,

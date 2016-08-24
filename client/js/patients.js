@@ -5,11 +5,11 @@ app.method.patients = {
         
         var id = $$('patients_datatable').getSelectedId().id;
         webix.confirm({
-            title: "Удаление клиента",
+            title: "Удаление пациента",
             ok:"Да", 
             cancel:"Нет",
             type:"confirm-warning",
-            text:"Хотите удалить этого клиента ?",
+            text:"Хотите удалить этого пациента ?",
             callback: function(result){
                 if(result){                   
                     var patient = app.patients.get(id);
@@ -33,7 +33,7 @@ app.method.patients = {
     onClickEdit: function(rowid){
         var item = new webix.ui( patient_config(patient_count) );
         $$("patients_tab_view").addView(item);
-        $$('$tab1').addOption({value:"Пац-нт Ефимова", close:true, id:item.config.id},true)
+        $$('$tab1').addOption({value:"Пациент", close:true, id:item.config.id},true)
         
         $$("main_info_" + patient_count + "_view").load(api+"patients/" + app.patients.get(rowid).id);
         patient_count++;
